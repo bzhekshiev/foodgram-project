@@ -7,10 +7,15 @@ from model_utils.models import TimeStampedModel
 User = get_user_model()
 
 
-class TagType(models.TextChoices):
-    BREAKFAST = 'breakfast', _('завтрак')
-    LUNCH = 'lunch', _('обед')
-    DINNER = 'dinner', _('ужин')
+class Tag(TimeStampedModel):
+    name = models.CharField(_('тег'), max_length=50)
+
+    class Meta:
+        verbose_name = _('тег')
+        verbose_name_plural = _('теги')
+
+    def __str__(self):
+        return self.name
 
 
 class Ingredient(TimeStampedModel):
@@ -31,13 +36,12 @@ class Recipe(TimeStampedModel):
     description = models.TextField(_('описание'))
     image = models.ImageField(_('картинка'), upload_to='upload')
     cooking_time = models.IntegerField(
-        _('время приготовления в минутах'), default=0)
+        _('время приготовления в минутах'))
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name = 'автор', related_name='recipe', db_index=True)
+        User, on_delete=models.CASCADE, verbose_name='автор', related_name='recipe', db_index=True)
     ingredients = models.ManyToManyField(
         Ingredient, through='RecipeIngredient')
-    tag = models.CharField(_('тег'), max_length=20,
-                           choices=TagType.choices, db_index=True)
+    tags = models.ManyToManyField(Tag, related_name='recipe_tag')
     slug = models.SlugField(max_length=300)
 
     class Meta:
@@ -49,8 +53,10 @@ class Recipe(TimeStampedModel):
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe, verbose_name='рецепт', on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(
+        Ingredient, verbose_name='ингредиент', on_delete=models.CASCADE)
     cnt = models.IntegerField(_('количество'))
     created = AutoCreatedField(_('дата создания'))
 

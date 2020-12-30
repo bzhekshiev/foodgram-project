@@ -4,8 +4,10 @@ const ingredientsContainer = document.querySelector('.form__field-group-ingredie
 const nameIngredient = document.querySelector('#nameIngredient');
 const formDropdownItems = document.querySelector('.form__dropdown-items');
 const cantidadVal = document.querySelector('#cantidadVal');
-const cantidad = document.querySelector('#cantidad')
+const cantidad = document.querySelector('#cantidad');
 const addIng = document.querySelector('#addIng');
+
+
 
 const api = new Api(apiUrl);
 const header = new Header(counterId);
@@ -85,7 +87,7 @@ const cbEventInput = (elem) => {
     return api.getIngredients(elem.target.value).then( e => {
         if(e.length !== 0 ) {
             const items = e.map( elem => {
-                return `<a class="form__item-list" data-val="${elem.dimension}"">${elem.title}</a>`
+                return `<a class="form__item-list" data-val="${elem.measure_unit}"">${elem.name}</a>`
             }).join(' ')
             formDropdownItems.style.display = 'flex';
             formDropdownItems.innerHTML = items;
@@ -106,4 +108,22 @@ formDropdownItems.addEventListener('click', ingredients.dropdown);
 // вешаем слушатель на кнопку
 addIng.addEventListener('click', ingredients.addIngredient);
 
+const tagsItem = document.querySelectorAll('.tags__item');
 
+tagsItem.forEach(el => {
+    let tagLabel = el.querySelector('label');
+    tagLabel.classList.add("tags__label");
+
+    let tagInput = el.querySelector('input')
+    let val = tagInput.getAttribute('value');
+    if (val === "1"){
+        tagInput.classList.add('tags__checkbox_style_orange')
+    };
+    if (val === "2"){
+        tagInput.classList.add('tags__checkbox_style_green')
+    }
+    if (val === "3"){
+        tagInput.classList.add('tags__checkbox_style_purple')
+    }
+    
+});

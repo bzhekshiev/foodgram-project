@@ -1,76 +1,112 @@
-{% extends 'base.html' %}
-{% load user_filters %}
+{% extends 'base.html' %} 
+{% load user_filters %} 
 
-{% block title %}
-    Рецепты
-{% endblock %}
-{% load static %}
+{% block title %} 
+    Рецепты 
+{%endblock %}
+
+{% load static %} 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
-{% endblock %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}" />
+{% endblock %} 
+
 {% block header %}
     <div class="main__header">
-        <h1 class="main__title">Рецепты</h1>
-        <ul class="tags">
-            <li class="tags__item">
-                <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
-                <span class="tags__label">Завтрак</span>
-            </li>
-            <li class="tags__item">
-                <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
-                <span for="lunch" class="tags__label">Обед</span>
-            </li>
-            <li class="tags__item">
-                <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
-                <label for="dinner" class="tags__label">Ужин</label>
-            </li>
-        </ul>
+    <h1 class="main__title">Рецепты</h1>
+    <ul class="tags">
+        <li class="tags__item">
+        <a
+            id="breakfast"
+            class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active"
+            href="#"
+        ></a>
+        <span class="tags__label">Завтрак</span>
+        </li>
+        <li class="tags__item">
+        <a
+            id="lunch"
+            class="tags__checkbox tags__checkbox_style_green tags__checkbox_active"
+            href="#"
+        ></a>
+        <span for="lunch" class="tags__label">Обед</span>
+        </li>
+        <li class="tags__item">
+        <a
+            id="dinner"
+            class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active"
+            href="#"
+        ></a>
+        <label for="dinner" class="tags__label">Ужин</label>
+        </li>
+    </ul>
     </div>
-{% endblock %}
+{% endblock %} 
 {% block content %}
     <div class="card-list">
-        
-        {% for recipe in page %}
-        <div class="card" data-id="120">
-            <a href="#" class="link" target="_blank"><img src="{{ recipe.image.url }}" alt="Какой-то текст" class="card__image"></a>
-            <div class="card__body">
-                <a class="card__title link" href="#" target="_blank">{{recipe.title}}</a>
-                <ul class="card__items">
-                    
-                    {% if recipe.tag == 'breakfast' %}
-                        <li class="card__item"><span class="badge badge_style_orange">{{recipe.get_tag_display}}</span></li>
-                    {% elif recipe.tag == 'lunch' %}
-                        <li class="card__item"><span class="badge badge_style_green">{{recipe.get_tag_display}}</span></li>
-                    {% elif recipe.tag == 'dinner' %}
-                        <li class="card__item"><span class="badge badge_style_purple">{{recipe.get_tag_display}}</span></li>
-                    {% endif %}
-            
-                </ul>
-                <div class="card__items card__items_column">
-                    <p class="card__text"><span class="icon-time"></span> {{recipe.cooking_time}} мин.</p>
-                    <p class="card__text"><span class="icon-user"></span> <a href="#" style="color: black">{{ recipe.author.get_full_name }}</a></p>
-                </div>
-            </div>
-            <div class="card__footer">
-                <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
-                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
-            </div>
+    {% for recipe in page %}
+    <div class="card" data-id="120">
+        <a href="#" class="link" target="_blank"
+        ><img
+            src="{{ recipe.image.url }}"
+            alt="Какой-то текст"
+            class="card__image"
+        /></a>
+        <div class="card__body">
+        <a class="card__title link" href="#" target="_blank">{{recipe.title}}</a>
+        <ul class="card__items">
+            {% for tag in recipe.tags.all %} 
+                {% if tag.id == 1 %}
+                <li class="card__item">
+                <span class="badge badge_style_orange"
+                    >{{ tag.name }}</span
+                >
+                </li>
+                {% elif tag.id == 2 %}
+                <li class="card__item">
+                <span class="badge badge_style_green"
+                    >{{ tag.name }}</span
+                >
+                </li>
+                {% elif tag.id == 3 %}
+                <li class="card__item">
+                <span class="badge badge_style_purple"
+                    >{{ tag.name }}</span
+                >
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="card__items card__items_column">
+            <p class="card__text">
+            <span class="icon-time"></span> {{recipe.cooking_time}} мин.
+            </p>
+            <p class="card__text">
+            <span class="icon-user"></span>
+            <a href="#" style="color: black">{{ recipe.author.get_full_name }}</a>
+            </p>
         </div>
-        {% endfor %}
+        </div>
+        <div class="card__footer">
+        <button class="button button_style_light-blue" name="purchases" data-out>
+            <span class="icon-plus button__icon"></span>Добавить в покупки
+        </button>
+        <button class="button button_style_none" name="favorites" data-out>
+            <span class="icon-favorite"></span>
+        </button>
+        </div>
     </div>
-{% include 'includes/pagination.html' with items=page paginator=paginator %}
-{% endblock %}
-    
+    {% endfor %}
+    </div>
+{% include 'includes/pagination.html' with items=page paginator=paginator %} 
+{% endblock %} 
+
 {% block js %}
-<script src="{% static 'js/components/MainCards.js' %}"></script>
-<script src="{% static 'js/components/Purchases.js' %}"></script>
-<script src=" {% static 'js/components/Favorites.js'%} "></script>
-<script src="{% static 'js/config/config.js' %}"></script>
-<script src="{% static 'js/components/CardList.js' %}"></script>
-<script src="{% static 'js/components/Header.js' %}"></script>
-<script src="{% static 'js/api/Api.js' %}"></script>
-<script src="{% static 'js/indexAuth.js' %} "></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/Purchases.js' %}"></script>
+    <script src=" {% static 'js/components/Favorites.js'%} "></script>
+    <script src="{% static 'js/config/config.js' %}"></script>
+    <script src="{% static 'js/components/CardList.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'js/indexAuth.js' %} "></script>
 {% endblock %}
-        
-
-
