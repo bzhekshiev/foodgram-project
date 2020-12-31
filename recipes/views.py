@@ -27,13 +27,19 @@ def server_error(request):
 
 
 def index(request):
-    recipes = Recipe.objects.order_by('-created').all()
+    recipes = Recipe.objects.all()
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(
         request, 'indexAuth.html', {'page': page, 'paginator': paginator})
 
+
+
+def recipe_view(request, pk):
+    recipe = Recipe.objects.get(pk=pk)
+    print(recipe)
+    return render(request, 'singlePage.html',{'recipe':recipe})
 
 @login_required
 def recipe_add(request):
@@ -46,9 +52,14 @@ def recipe_add(request):
             return redirect('index')
     else:
         form = RecipeForm()
-
     return render(request, 'formRecipe.html', {'form': form})
 
+def profile(request, username):
+    recipes = Recipe.objects.filter(author__username=username)
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request,'authorRecipe.html',{'page': page, 'paginator': paginator})
 
 def shop_list(request):
     return render(request, 'shopList.html')

@@ -47,6 +47,7 @@ class Recipe(TimeStampedModel):
     class Meta:
         verbose_name = _('рецепт')
         verbose_name_plural = _('рецепты')
+        ordering = ['-created']
 
     def __str__(self):
         return self.title
@@ -54,7 +55,7 @@ class Recipe(TimeStampedModel):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
-        Recipe, verbose_name='рецепт', on_delete=models.CASCADE)
+        Recipe, verbose_name='рецепт', on_delete=models.CASCADE,related_name='recipe_cnt')
     ingredient = models.ForeignKey(
         Ingredient, verbose_name='ингредиент', on_delete=models.CASCADE)
     cnt = models.IntegerField(_('количество'))
