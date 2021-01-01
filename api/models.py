@@ -8,10 +8,24 @@ User = get_user_model()
 
 
 class Favorite(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='автор', related_name='author_favorite')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name='рецепт', related_name='recipe_favorite')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               verbose_name='автор', related_name='author_favorite')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               verbose_name='рецепт', related_name='recipe_favorite')
 
     class Meta:
-        unique_together = ('author','recipe')
+        unique_together = ('author', 'recipe')
         verbose_name = _('избранное')
         verbose_name_plural = _('избранные')
+
+
+class Subscribe(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               related_name='following', verbose_name='автор')
+    follower = models.ForeignKey(User, on_delete=models.CASCADE,
+                                 related_name='follower', verbose_name='подписчик')
+
+    class Meta:
+        unique_together = ('author', 'follower')
+        verbose_name = 'подписка'
+        verbose_name_plural = 'подписки'

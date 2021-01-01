@@ -38,7 +38,6 @@ def index(request):
 
 def recipe_view(request, pk):
     recipe = Recipe.objects.get(pk=pk)
-    print(recipe)
     return render(request, 'singlePage.html', {'recipe': recipe})
 
 
@@ -69,6 +68,13 @@ def favorite(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(request, 'favorite.html', {'page': page, 'paginator': paginator})
+
+def subscription(request):
+    recipes = Recipe.objects.filter(recipe_favorite__author=request.user)
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'myFollow.html', {'page': page, 'paginator': paginator})
 
 def shop_list(request):
     return render(request, 'shopList.html')

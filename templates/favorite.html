@@ -17,6 +17,7 @@
     </div>
 {% endblock %} 
 {% block content %}
+{% csrf_token %}
     <div class="card-list">
         {% for recipe in page %}
             {% include 'includes/recipe_card.html' with recipe=recipe %}

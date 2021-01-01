@@ -1,17 +1,18 @@
+{% load user_filters %} 
 {% if user.is_authenticated %} 
 <nav class="nav">
   <div class="nav__container container">
     <ul class="nav__items list">
-      <li class="nav__item nav__item_active">
+      <li class="nav__item {% active 'index' %}">
         <a href="{% url 'index' %}" class="nav__link link">Рецепты</a>
       </li>
-      <li class="nav__item">
-        <a href="#" class="nav__link link">Мои подписки</a>
+      <li class="nav__item {% active 'subscription' %}">
+        <a href="{% url 'subscription' %}" class="nav__link link">Мои подписки</a>
       </li>
-      <li class="nav__item">
+      <li class="nav__item {% active 'recipe_add' %}">
         <a href="{% url 'recipe_add' %}" class="nav__link link">Создать рецепт</a>
       </li>
-      <li class="nav__item">
+      <li class="nav__item {% active 'favorite' %}">
         <a href="{% url 'favorite' %}" class="nav__link link">Избранное</a>
       </li>
       <li class="nav__item">
