@@ -1,3 +1,4 @@
+from api.models import Favorite
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
@@ -35,11 +36,11 @@ def index(request):
         request, 'indexAuth.html', {'page': page, 'paginator': paginator})
 
 
-
 def recipe_view(request, pk):
     recipe = Recipe.objects.get(pk=pk)
     print(recipe)
-    return render(request, 'singlePage.html',{'recipe':recipe})
+    return render(request, 'singlePage.html', {'recipe': recipe})
+
 
 @login_required
 def recipe_add(request):
@@ -54,12 +55,20 @@ def recipe_add(request):
         form = RecipeForm()
     return render(request, 'formRecipe.html', {'form': form})
 
+
 def profile(request, username):
     recipes = Recipe.objects.filter(author__username=username)
     paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(request,'authorRecipe.html',{'page': page, 'paginator': paginator})
+    return render(request, 'authorRecipe.html', {'page': page, 'paginator': paginator})
+
+def favorite(request):
+    recipes = Recipe.objects.filter(recipe_favorite__author=request.user)
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'favorite.html', {'page': page, 'paginator': paginator})
 
 def shop_list(request):
     return render(request, 'shopList.html')

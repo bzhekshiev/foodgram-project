@@ -27,12 +27,12 @@ SECRET_KEY = 'ixn4bt@47kav1la4o8-7uriyzcr^*_q$8(g2v0w=!*+vq$@7as'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ 
-    "localhost", 
-    "127.0.0.1", 
-    "[::1]", 
-    "testserver", 
-] 
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "[::1]",
+    "testserver",
+]
 
 INSTALLED_APPS = [
     'django.contrib.sites',
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'users',
     'recipes',
     'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -132,9 +133,18 @@ else:
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
- 
-LOGIN_URL = "/auth/login/" 
-LOGIN_REDIRECT_URL = "index" 
+
+LOGIN_URL = "/auth/login/"
+LOGIN_REDIRECT_URL = "index"
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / 'tmp/send_mails'
+
+SITE_ID = 1
 
 
-SITE_ID = 1 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
