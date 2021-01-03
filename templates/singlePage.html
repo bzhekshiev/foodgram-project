@@ -42,18 +42,18 @@
                 <span class="icon-user"></span>{{ recipe.author.get_full_name }}
             </p>
             </li>
-            <li class="single-card__item">
-            <a style="margin-left: 2.5em" href="#" class="single-card__text"
-                >Редактировать рецепт</a
-            >
-            </li>
+            {% if request.user == recipe.author %}
+                <li class="single-card__item">
+                    <a style="margin-left: 2.5em" href="{% url 'recipe_edit' pk=recipe.id %}" class="single-card__text"
+                        >Редактировать рецепт</a
+                >
+                </li>
+            {% endif %}
         </ul>
         </div>
         <ul class="single-card__items">
         <li class="single-card__item">
-            <button class="button button_style_blue" name="purchases" data-out>
-            <span class="icon-plus"></span> Добавить в покупки
-            </button>
+            {% include 'includes/purchase_add.html' %}
         </li>
         <li class="single-card__item">
             {% include 'includes/subscription_add.html' with ctx=recipe%}

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'recipes',
     'rest_framework',
     'api',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'recipes.views.purchase_count',
             ],
         },
     },

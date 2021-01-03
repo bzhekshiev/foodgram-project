@@ -49,7 +49,6 @@
                   </div>
               {% endfor %}   
           </div>
-          <span class="form__error"></span>
         </div>
       </div>
       <div class="form__group">
@@ -81,15 +80,14 @@
       <div class="form__group">
         <label for="{{ form.description.id_for_label }}" class="form__label">Описание</label>
         <div class="form__field-group">
-
           {{ form.description|addclass:"form__textarea" }}
         </div>
       </div>
       <div class="form__group">
         <span class="form__label">Загрузить фото</span>
         <div class="form__field-group">
-          <!-- <input type="file" name="file" id="id_file" /> -->
-          {{ form.image }}
+          {{ form.image|addclass:"form__file-button" }}
+          <span class="form__error">{{ form.image.errors }}</span>
         </div>
       </div>
 
