@@ -1,3 +1,14 @@
-from django.contrib import admin
+# from django.contrib import admin, auth
+# from django.contrib.auth import get_user_model
 
-# Register your models here.
+# User = get_user_model()
+
+
+# class Admin(auth.admin.UserAdmin):
+#     list_filter = ('username', 'email', )
+#     search_fields = ('^username', '^email', )
+#     ordering = ('username', )
+
+
+# admin.site.register(User, Admin)
+# admin.site.unregister(auth.models.Group)

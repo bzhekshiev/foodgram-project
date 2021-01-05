@@ -20,17 +20,20 @@
     <form
       class="form"
       method="post"
-      action="{% url 'recipe_add' %}"
       enctype="multipart/form-data"
+      action="{% url 'recipe_add' %}"
     >
       {% csrf_token %} 
+
       {% if form.errors %} 
-          {% for error in form.errors %}
+          {% for error in form.field_errors %}
           <span class="form__error">
               {{ error|escape }}
           </span>
           {% endfor %} 
+        </span>
       {% endif %}
+
       <div class="form__group">
         <label for="{{ form.title.id_for_label}}" class="form__label"
           >Название рецепта</label
@@ -66,7 +69,13 @@
           <span class="form__ingredient-link" id="addIng"
             >Добавить ингредиент</span
           >
-          <span class="form__error"></span>
+        {% if form.errors %}
+            {% for error in form.non_field_errors %}
+                <span class="form__error">
+                    {{ error|escape }}
+                </span>
+            {% endfor %}
+        {% endif %}
         </div>
       </div>
       <div class="form__group">

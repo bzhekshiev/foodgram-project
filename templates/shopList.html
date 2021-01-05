@@ -15,6 +15,11 @@
 {% endblock %}
 {% block content %}
 {% csrf_token %}
+
+    {% if not recipes %}
+        <p class="card__text">Список покупок пуст</p>
+    {% endif %}
+    
     <div class="card-list card-list_column">
         <ul class="shopping-list"></ul>
         {% for recipe in recipes %}
@@ -28,7 +33,11 @@
         </li>
         {% endfor %}
         </ul>
-        <a href="#"><button class="button button_style_blue">Скачать список</button></a>
+        
+        {% if recipes %}
+            <a href="{% url 'shoplist' %}"><button class="button button_style_blue">Скачать список</button></a>
+        {% endif %}
+        
     </div>
 {% endblock %}
 

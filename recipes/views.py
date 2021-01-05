@@ -1,7 +1,8 @@
 from api.models import Favorite, Purchase, Subscribe
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Sum
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import requires_csrf_token
 
@@ -31,10 +32,19 @@ def server_error(request):
 
 
 def index(request):
-    recipes = Recipe.objects.all()
+    tags = request.GET.getlist('tags')
+    if tags:
+        recipes = Recipe.objects.prefetch_related(
+            'author', 'tags'
+        ).filter(
+            tags__slug__in=tags
+        ).distinct()
+    else:
+        recipes = Recipe.objects.all()
+    all_tags = Tag.objects.all()
     page, paginator = paginator_mixin(request, recipes)
     return render(
-        request, 'indexAuth.html', {'page': page, 'paginator': paginator})
+        request, 'indexAuth.html', {'page': page, 'paginator': paginator,  'all_tags': all_tags})
 
 
 def recipe_view(request, pk):
@@ -46,6 +56,10 @@ def recipe_view(request, pk):
 def recipe_add(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST, files=request.FILES)
+
+        if not 'nameIngredient_1' in request.POST:
+            form.add_error(None, 'Внесите ингредиенты, пожалуйста!')
+
         if form.is_valid():
             recipe_save = save_recipe(request, form)
             if recipe_save == 400:
@@ -64,13 +78,17 @@ def recipe_edit(request, pk):
     if request.method == 'POST':
         form = RecipeForm(request.POST or None,
                           files=request.FILES or None, instance=recipe)
+
+        if not 'nameIngredient_1' in request.POST:
+            form.add_error(None, 'Внесите ингредиенты, пожалуйста!')
+
         if form.is_valid():
             for tag_id in recipe.tags.all():
                 recipe.tags.remove(tag_id)
             recipe.recipe_cnt.all().delete()
             recipe_save = save_recipe(request, form)
             if recipe_save == 400:
-                return redirect('recipe_view', pk=pk)
+                return redirect('index')
             return redirect('recipe_view', pk=pk)
     else:
         form = RecipeForm(instance=recipe)
@@ -95,9 +113,18 @@ def profile(request, username):
 
 @login_required
 def favorites(request):
-    recipes = Recipe.objects.filter(recipe_favorite__author=request.user)
+    tags = request.GET.getlist('tags')
+    if tags:
+        recipes = Recipe.objects.filter(recipe_favorite__author=request.user).prefetch_related(
+            'author', 'tags'
+        ).filter(
+            tags__slug__in=tags
+        ).distinct()
+    else:
+        recipes = Recipe.objects.filter(recipe_favorite__author=request.user)
+    all_tags = Tag.objects.all()
     page, paginator = paginator_mixin(request, recipes)
-    return render(request, 'favorite.html', {'page': page, 'paginator': paginator})
+    return render(request, 'favorite.html', {'page': page, 'paginator': paginator, 'all_tags': all_tags})
 
 
 @login_required
@@ -126,3 +153,22 @@ def purchase_remove(request, recipe_id):
 @login_required
 def purchase_count(request):
     return {'purchase_count': Purchase.objects.filter(author=request.user).count()}
+
+
+@login_required
+def get_shoplist(request):
+    ingredients = Recipe.objects.prefetch_related('ingredients', 'recipe_cnt'
+                                                  ).filter(recipe_purchase__author=request.user
+                                                           ).order_by('ingredients__name').values(
+        'ingredients__name', 'ingredients__measure_unit'
+    ).annotate(
+        cnt=Sum('recipe_cnt__cnt'))
+    ingredient_txt = [
+        (f"\u2022 {item['ingredients__name'].capitalize()} "
+         f"({item['ingredients__measure_unit']}) \u2014 {item['cnt']} \n")
+        for item in ingredients
+    ]
+    filename = 'shoplist.txt'
+    response = HttpResponse(ingredient_txt, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    return response

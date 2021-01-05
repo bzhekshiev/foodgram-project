@@ -15,7 +15,7 @@ def save_recipe(request, form):
             recipe.save()
             for tag in form.cleaned_data['tags']:
                 recipe.tags.add(tag.id)
-              
+
             ingredients = []
             for key, value in form.data.items():
                 if 'nameIngredient' in key:

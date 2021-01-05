@@ -11,10 +11,10 @@ handler400 = 'recipes.views.page_bad_request'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('recipe/', include('recipes.urls')),
+    path('', include('recipes.urls')),
     path('auth/', include('users.urls')),
     path('auth/', include('django.contrib.auth.urls')),
-    path('', include('api.urls')),
+    path('api/', include('api.urls')),
 ]
 
 

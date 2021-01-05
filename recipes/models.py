@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from model_utils.fields import AutoCreatedField
 from model_utils.models import TimeStampedModel
@@ -9,8 +11,11 @@ User = get_user_model()
 
 class Tag(TimeStampedModel):
     name = models.CharField(_('тег'), max_length=50)
+    slug = models.SlugField(max_length=20)
+    color = models.CharField(_('цвет чекбокса'), max_length=20)
 
     class Meta:
+        ordering = ['id']
         verbose_name = _('тег')
         verbose_name_plural = _('теги')
 
@@ -42,7 +47,6 @@ class Recipe(TimeStampedModel):
     ingredients = models.ManyToManyField(
         Ingredient, through='RecipeIngredient')
     tags = models.ManyToManyField(Tag, related_name='recipe_tag')
-    slug = models.SlugField(max_length=300)
 
     class Meta:
         verbose_name = _('рецепт')
@@ -55,7 +59,7 @@ class Recipe(TimeStampedModel):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
-        Recipe, verbose_name='рецепт', on_delete=models.CASCADE,related_name='recipe_cnt')
+        Recipe, verbose_name='рецепт', on_delete=models.CASCADE, related_name='recipe_cnt')
     ingredient = models.ForeignKey(
         Ingredient, verbose_name='ингредиент', on_delete=models.CASCADE)
     cnt = models.IntegerField(_('количество'))
