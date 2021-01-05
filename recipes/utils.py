@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 
 from .models import Ingredient, Recipe, RecipeIngredient, Tag
@@ -12,9 +13,8 @@ def save_recipe(request, form):
             recipe = form.save(commit=False)
             recipe.author = request.user
             recipe.save()
-            for tag_id in request.POST.getlist('tags'):
-                tag = Tag.objects.get(pk=tag_id)
-                recipe.tags.add(tag)
+            for tag in form.cleaned_data['tags']:
+                recipe.tags.add(tag.id)
 
             ingredients = []
             for key, value in form.data.items():
@@ -28,9 +28,16 @@ def save_recipe(request, form):
                         name=name, measure_unit=measure_unit)
                     ingredients.append(
                         RecipeIngredient(
-                            ingredient=ingredient, recipe=recipe,cnt=cnt)
+                            ingredient=ingredient, recipe=recipe, cnt=cnt)
                     )
             RecipeIngredient.objects.bulk_create(ingredients)
             return None
     except IntegrityError:
         return 400
+
+
+def paginator_mixin(request, queryset):
+    paginator = Paginator(queryset, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return page, paginator

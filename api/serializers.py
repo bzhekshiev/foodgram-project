@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from recipes.models import Ingredient, Recipe
 from rest_framework import serializers
 
-from api.models import Favorite, Subscribe
+from api.models import Favorite, Subscribe, Purchase
 
 User = get_user_model()
 
@@ -44,3 +44,21 @@ class SubscribeSerializer(serializers.ModelSerializer):
         if 'follower' not in validated_data:
             validated_data['follower'] = self.context['request'].user
         return Subscribe.objects.create(**validated_data)
+
+
+
+class PurchaseSerializer(serializers.ModelSerializer):
+
+    id = serializers.SlugRelatedField(
+        slug_field='id', queryset=Recipe.objects.all(), source='recipe')
+    author = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
+
+    class Meta:
+        fields = ('id', 'author')
+        model = Purchase
+
+    def create(self, validated_data):
+        if 'author' not in validated_data:
+            validated_data['author'] = self.context['request'].user
+        return Purchase.objects.create(**validated_data)

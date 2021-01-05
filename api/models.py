@@ -29,3 +29,15 @@ class Subscribe(models.Model):
         unique_together = ('author', 'follower')
         verbose_name = 'подписка'
         verbose_name_plural = 'подписки'
+
+
+class Purchase(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                               verbose_name='автор', related_name='author_purchase')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               verbose_name='рецепт', related_name='recipe_purchase')
+
+    class Meta:
+        unique_together = ('author', 'recipe')
+        verbose_name = _('список покупок')
+        verbose_name_plural = _('списки покупок')

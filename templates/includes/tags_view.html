@@ -1,18 +1,18 @@
 <ul class="{{ class }}__items">
     {% for tag in recipe.tags.all %} 
-        {% if tag.id == 1 %}
+        {% if tag.name == 'Завтрак' %}
         <li class="{{ class }}__item">
         <span class="badge badge_style_orange"
             >{{ tag.name }}</span
         >
         </li>
-        {% elif tag.id == 2 %}
+        {% elif tag.name == 'Обед' %}
         <li class="{{ class }}__item">
         <span class="badge badge_style_green"
             >{{ tag.name }}</span
         >
         </li>
-        {% elif tag.id == 3 %}
+        {% elif tag.name == 'Ужин' %}
         <li class="{{ class }}__item">
         <span class="badge badge_style_purple"
             >{{ tag.name }}</span

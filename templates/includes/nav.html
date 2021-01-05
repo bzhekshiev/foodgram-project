@@ -6,18 +6,18 @@
       <li class="nav__item {% active 'index' %}">
         <a href="{% url 'index' %}" class="nav__link link">Рецепты</a>
       </li>
-      <li class="nav__item {% active 'subscription' %}">
-        <a href="{% url 'subscription' %}" class="nav__link link">Мои подписки</a>
+      <li class="nav__item {% active 'subscriptions' %}">
+        <a href="{% url 'subscriptions' %}" class="nav__link link">Мои подписки</a>
       </li>
       <li class="nav__item {% active 'recipe_add' %}">
         <a href="{% url 'recipe_add' %}" class="nav__link link">Создать рецепт</a>
       </li>
-      <li class="nav__item {% active 'favorite' %}">
-        <a href="{% url 'favorite' %}" class="nav__link link">Избранное</a>
+      <li class="nav__item {% active 'favorites' %}">
+        <a href="{% url 'favorites' %}" class="nav__link link">Избранное</a>
       </li>
-      <li class="nav__item">
-        <a href="#" class="nav__link link">Список покупок</a>
-        <span class="badge badge_style_blue nav__badge" id="counter">4</span>
+      <li class="nav__item {% active 'purchases' %}">
+        <a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a>
+        <span class="badge badge_style_blue nav__badge" id="counter">{{ purchase_count|default_if_none:"0" }}</span>
       </li>
     </ul>
     <ul class="nav__items list">
@@ -36,7 +36,7 @@
         <a href="{% url 'index' %}" class="nav__link link">Рецепты</a>
       </li>
       <li class="nav__item nav__item_disabled">
-        <a href="{% url 'shop_list' %}" class="nav__link link">Список покупок</a>
+        <a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a>
       </li>
     </ul>
     <ul class="nav__items list">

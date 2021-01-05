@@ -113,16 +113,17 @@ const tagsItem = document.querySelectorAll('.tags__item');
 tagsItem.forEach(el => {
     let tagLabel = el.querySelector('label');
     tagLabel.classList.add("tags__label");
+    let labelText = tagLabel.innerText
 
     let tagInput = el.querySelector('input')
-    let val = tagInput.getAttribute('value');
-    if (val === "1"){
+
+    if (labelText === "Завтрак"){
         tagInput.classList.add('tags__checkbox_style_orange')
     };
-    if (val === "2"){
+    if (labelText === "Обед"){
         tagInput.classList.add('tags__checkbox_style_green')
     }
-    if (val === "3"){
+    if (labelText === "Ужин"){
         tagInput.classList.add('tags__checkbox_style_purple')
     }
     
