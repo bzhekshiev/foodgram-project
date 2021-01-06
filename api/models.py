@@ -1,17 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from model_utils.fields import AutoCreatedField
 from recipes.models import Recipe
 
 User = get_user_model()
 
 
 class Favorite(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               verbose_name='автор', related_name='author_favorite')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
-                               verbose_name='рецепт', related_name='recipe_favorite')
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='автор',
+        related_name='author_favorite')
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, verbose_name='рецепт',
+        related_name='recipe_favorite')
 
     class Meta:
         unique_together = ('author', 'recipe')
@@ -22,8 +23,9 @@ class Favorite(models.Model):
 class Subscribe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='following', verbose_name='автор')
-    follower = models.ForeignKey(User, on_delete=models.CASCADE,
-                                 related_name='follower', verbose_name='подписчик')
+    follower = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='follower',
+        verbose_name='подписчик')
 
     class Meta:
         unique_together = ('author', 'follower')
@@ -32,10 +34,12 @@ class Subscribe(models.Model):
 
 
 class Purchase(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE,
-                               verbose_name='автор', related_name='author_purchase')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
-                               verbose_name='рецепт', related_name='recipe_purchase')
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='автор',
+        related_name='author_purchase')
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, verbose_name='рецепт',
+        related_name='recipe_purchase')
 
     class Meta:
         unique_together = ('author', 'recipe')

@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from recipes.models import Ingredient, Recipe
 from rest_framework import serializers
 
-from api.models import Favorite, Subscribe, Purchase
+from api.models import Favorite, Purchase, Subscribe
 
 User = get_user_model()
 
@@ -44,7 +44,6 @@ class SubscribeSerializer(serializers.ModelSerializer):
         if 'follower' not in validated_data:
             validated_data['follower'] = self.context['request'].user
         return Subscribe.objects.create(**validated_data)
-
 
 
 class PurchaseSerializer(serializers.ModelSerializer):

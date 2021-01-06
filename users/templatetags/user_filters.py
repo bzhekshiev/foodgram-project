@@ -1,5 +1,3 @@
-import re
-
 from api.models import Favorite, Purchase, Subscribe
 from django import template
 
@@ -31,18 +29,20 @@ def is_subscribe(value, follower):
         author=value, follower=follower
     ).exists()
 
+
 @register.filter
 def remove_from_list(obj, value):
-    
+
     return obj.remove(value)
+
 
 @register.simple_tag(takes_context=True)
 def active(context, pattern_or_urlname):
     try:
-        pattern=reverse(pattern_or_urlname)
+        pattern = reverse(pattern_or_urlname)
     except NoReverseMatch:
-        pattern=pattern_or_urlname
-    path=context['request'].path
+        pattern = pattern_or_urlname
+    path = context['request'].path
     if pattern == path:
         return 'nav__item_active'
     return ''
@@ -51,6 +51,7 @@ def active(context, pattern_or_urlname):
 @register.filter
 def get_tags(request):
     return request.getlist('tags')
+
 
 @register.filter
 def rebuild_tag_link(request, tag):
@@ -62,6 +63,7 @@ def rebuild_tag_link(request, tag):
     else:
         request_copy.appendlist('tags', tag)
     return request_copy.urlencode()
+
 
 @register.filter
 def url_with_get(request, page):

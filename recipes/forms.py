@@ -1,8 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Recipe, Tag
-
+from .models import Recipe
 
 
 class RecipeForm(forms.ModelForm):
@@ -12,8 +11,8 @@ class RecipeForm(forms.ModelForm):
                   'cooking_time', 'tags')
         widgets = {
             'description': forms.Textarea(attrs={'rows': 8}),
-            'tags': forms.CheckboxSelectMultiple(attrs={'class': 'tags__checkbox'}),
-        }
+            'tags': forms.CheckboxSelectMultiple(
+                attrs={'class': 'tags__checkbox'}), }
 
         help_texts = {
             'title': _('Заполните заголовок рецепта.'),

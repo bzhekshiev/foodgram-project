@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from model_utils.fields import AutoCreatedField
 from model_utils.models import TimeStampedModel
@@ -43,7 +41,8 @@ class Recipe(TimeStampedModel):
     cooking_time = models.IntegerField(
         _('время приготовления в минутах'))
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='автор', related_name='recipe', db_index=True)
+        User, on_delete=models.CASCADE, verbose_name='автор',
+        related_name='recipe', db_index=True)
     ingredients = models.ManyToManyField(
         Ingredient, through='RecipeIngredient')
     tags = models.ManyToManyField(Tag, related_name='recipe_tag')
@@ -59,7 +58,8 @@ class Recipe(TimeStampedModel):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
-        Recipe, verbose_name='рецепт', on_delete=models.CASCADE, related_name='recipe_cnt')
+        Recipe, verbose_name='рецепт', on_delete=models.CASCADE,
+        related_name='recipe_cnt')
     ingredient = models.ForeignKey(
         Ingredient, verbose_name='ингредиент', on_delete=models.CASCADE)
     cnt = models.IntegerField(_('количество'))

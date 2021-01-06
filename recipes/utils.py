@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 
-from .models import Ingredient, Recipe, RecipeIngredient, Tag
+from .models import Ingredient, RecipeIngredient
 
 
 def save_recipe(request, form):

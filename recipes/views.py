@@ -1,13 +1,12 @@
-from api.models import Favorite, Purchase, Subscribe
+from api.models import Purchase
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.csrf import requires_csrf_token
 
 from .forms import RecipeForm
-from .models import Ingredient, Recipe, Tag
+from .models import Recipe, Tag
 from .utils import paginator_mixin, save_recipe
 
 User = get_user_model()
@@ -43,7 +42,8 @@ def index(request):
     all_tags = Tag.objects.all()
     page, paginator = paginator_mixin(request, recipes)
     return render(
-        request, 'indexAuth.html', {'page': page, 'paginator': paginator,  'all_tags': all_tags})
+        request, 'indexAuth.html',
+        {'page': page, 'paginator': paginator, 'all_tags': all_tags})
 
 
 def recipe_view(request, pk):
@@ -56,7 +56,7 @@ def recipe_add(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST, files=request.FILES)
 
-        if not 'nameIngredient_1' in request.POST:
+        if 'nameIngredient_1' not in request.POST:
             form.add_error(None, 'Внесите ингредиенты, пожалуйста!')
 
         if form.is_valid():
@@ -78,7 +78,7 @@ def recipe_edit(request, pk):
         form = RecipeForm(request.POST or None,
                           files=request.FILES or None, instance=recipe)
 
-        if not 'nameIngredient_1' in request.POST:
+        if 'nameIngredient_1' not in request.POST:
             form.add_error(None, 'Внесите ингредиенты, пожалуйста!')
 
         if form.is_valid():
@@ -91,7 +91,8 @@ def recipe_edit(request, pk):
             return redirect('recipe_view', pk=pk)
     else:
         form = RecipeForm(instance=recipe)
-    return render(request, 'formChangeRecipe.html', {'form': form, 'recipe': recipe})
+    return render(request, 'formChangeRecipe.html',
+                  {'form': form, 'recipe': recipe})
 
 
 @login_required
@@ -106,31 +107,35 @@ def recipe_remove(request, pk):
 def profile(request, username):
     recipes = Recipe.objects.filter(author__username=username)
     page, paginator = paginator_mixin(request, recipes)
-    return render(request, 'authorRecipe.html', {'page': page, 'paginator': paginator})
+    return render(request, 'authorRecipe.html',
+                  {'page': page, 'paginator': paginator})
 
 
 @login_required
 def favorites(request):
     tags = request.GET.getlist('tags')
     if tags:
-        recipes = Recipe.objects.filter(recipe_favorite__author=request.user).prefetch_related(
-            'author', 'tags'
-        ).filter(
-            tags__slug__in=tags
-        ).distinct()
+        recipes = Recipe.objects.filter(
+            recipe_favorite__author=request.user).prefetch_related(
+            'author', 'tags').filter(
+            tags__slug__in=tags).distinct()
     else:
         recipes = Recipe.objects.filter(recipe_favorite__author=request.user)
     all_tags = Tag.objects.all()
     page, paginator = paginator_mixin(request, recipes)
-    return render(request, 'favorite.html', {'page': page, 'paginator': paginator, 'all_tags': all_tags})
+    return render(
+        request, 'favorite.html',
+        {'page': page, 'paginator': paginator, 'all_tags': all_tags})
 
 
 @login_required
 def subscriptions(request):
-    authors = User.objects.prefetch_related(
-        'recipe').filter(following__follower=request.user).annotate(recipe_cnt=Count('recipe__id'))
+    authors = User.objects.prefetch_related('recipe').filter(
+        following__follower=request.user).annotate(
+        recipe_cnt=Count('recipe__id'))
     page, paginator = paginator_mixin(request, authors)
-    return render(request, 'myFollow.html', {'page': page, 'paginator': paginator})
+    return render(request, 'myFollow.html',
+                  {'page': page, 'paginator': paginator})
 
 
 def purchases(request):
@@ -150,7 +155,8 @@ def purchase_count(request):
     if request.user.is_authenticated:
         return {'purchase_count': Purchase.objects.filter(author=request.user).count()}
     else:
-        return {'purchase_count':None}
+        return {'purchase_count': None}
+
 
 @login_required
 def get_shoplist(request):

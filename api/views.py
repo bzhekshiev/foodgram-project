@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from recipes.models import Ingredient, Recipe
 from rest_framework import filters, generics

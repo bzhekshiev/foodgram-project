@@ -9,6 +9,7 @@ class IngredientnlineAdmin(admin.TabularInline):
     autocomplete_fields = ('ingredient',)
     extra = 1
 
+
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measure_unit')
@@ -23,7 +24,6 @@ class RecipeAdmin(admin.ModelAdmin):
     list_per_page = 20
     search_fields = ('title', 'author',)
 
-
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.annotate(added_favorite=Count('recipe_favorite'))
@@ -33,6 +33,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
     get_favorite.short_description = 'добавлен в избранное, раз'
 
+
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name','slug','color')
+    list_display = ('name', 'slug', 'color')
