@@ -1,8 +1,9 @@
 from django.conf import settings
+from django.conf.urls import handler400, handler404, handler500
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.flatpages import views
 from django.urls import include, path
-from django.conf.urls import handler404, handler500, handler400
 
 handler404 = 'recipes.views.page_not_found'
 handler500 = 'recipes.views.server_error'
@@ -18,10 +19,10 @@ urlpatterns = [
 ]
 
 
-# urlpatterns += [
-#     path('about-us/', views.flatpage, {'url': '/about-us/'}, name='about'),
-#     path('terms/', views.flatpage, {'url': '/terms/'}, name='terms'),
-# ]
+urlpatterns += [
+    path('about-us/', views.flatpage, {'url': '/about-us/'}, name='about'),
+    path('tech/', views.flatpage, {'url': '/tech/'}, name='tech'),
+]
 
 
 if settings.DEBUG:

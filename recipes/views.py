@@ -13,7 +13,6 @@ from .utils import paginator_mixin, save_recipe
 User = get_user_model()
 
 
-@requires_csrf_token
 def page_bad_request(request, exception):
     return render(request, "misc/400.html", {"path": request.path}, status=400)
 
@@ -48,7 +47,7 @@ def index(request):
 
 
 def recipe_view(request, pk):
-    recipe = Recipe.objects.get(pk=pk)
+    recipe = get_object_or_404(Recipe, pk=pk)
     return render(request, 'singlePage.html', {'recipe': recipe})
 
 
@@ -63,7 +62,7 @@ def recipe_add(request):
         if form.is_valid():
             recipe_save = save_recipe(request, form)
             if recipe_save == 400:
-                return redirect('recipe_add')
+                return redirect('page_bad_request')
             return redirect('index')
     else:
         form = RecipeForm()
@@ -88,7 +87,7 @@ def recipe_edit(request, pk):
             recipe.recipe_cnt.all().delete()
             recipe_save = save_recipe(request, form)
             if recipe_save == 400:
-                return redirect('index')
+                return redirect('page_bad_request')
             return redirect('recipe_view', pk=pk)
     else:
         form = RecipeForm(instance=recipe)
@@ -104,7 +103,6 @@ def recipe_remove(request, pk):
     return redirect('index')
 
 
-@login_required
 def profile(request, username):
     recipes = Recipe.objects.filter(author__username=username)
     page, paginator = paginator_mixin(request, recipes)
