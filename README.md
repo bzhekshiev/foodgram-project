@@ -1,2 +1,2 @@
 # foodgram-project
-foodgram-project
+Dockerfile, конфиги nginx и другие файлы, связанные со второй частью, прошу во внимание не принимать
