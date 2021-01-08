@@ -1,7 +1,9 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
+from django.shortcuts import get_object_or_404
 
 from .models import Ingredient, RecipeIngredient
 
@@ -24,8 +26,8 @@ def save_recipe(request, form):
                     cnt = Decimal(value.replace(',', '.'))
                 elif 'unitsIngredient' in key:
                     measure_unit = value
-                    ingredient = Ingredient.objects.get(
-                        name=name, measure_unit=measure_unit)
+                    ingredient = get_object_or_404(
+                        Ingredient, name=name, measure_unit=measure_unit)
                     ingredients.append(
                         RecipeIngredient(
                             ingredient=ingredient, recipe=recipe, cnt=cnt)
@@ -37,7 +39,7 @@ def save_recipe(request, form):
 
 
 def paginator_mixin(request, queryset):
-    paginator = Paginator(queryset, 6)
+    paginator = Paginator(queryset, settings.PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return page, paginator

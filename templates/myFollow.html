@@ -4,7 +4,7 @@
 
 {% block title %} 
     Мои подписки
-{%endblock %}
+{% endblock %}
 
 {% load static %} 
 {% block css %}
@@ -21,13 +21,13 @@
 {% csrf_token %}    
     <div class="card-list">
         {% for author in page %}
-        <div class="card-user" data-author="{{author.id}}">
+        <div class="card-user" data-author="{{ author.id }}">
         <div class="card-user__header">
             <h2 class="card-user__title">{{ author.get_full_name }}</h2>
         </div>
         <div class="card-user__body">
             <ul class="card-user__items">
-                {% for recipe in author.recipe.all  %}
+                {% for recipe in author.recipe.all %}
                     {% if forloop.counter < 4 %}
                     <li class="card-user__item">
                         <div class="recipe">
@@ -35,15 +35,14 @@
                                 <img src="{{ im.url }}" alt="Картинка" class="recipe__image">
                             {% endthumbnail %}
                             <a class="card__title link" href="{% url 'recipe_view' pk=recipe.id %}" target="_blank"><h3 class="recipe__title">{{ recipe.title }}</h3></a>
-                            
-                            <p class="recipe__text"><span class="icon-time"></span>  {{recipe.cooking_time}} мин.</p>
+                            <p class="recipe__text"><span class="icon-time"></span>  {{ recipe.cooking_time }} мин.</p>
                         </div>
                     </li> 
                     {% endif %}
                 {% endfor %}
-                {% if author.recipe_cnt > 4 %}
+                {% if author.recipe_ingredients >= 4 %}
                     <li class="card-user__item">
-                        <a href="{% url 'profile' author.username %}" class="card-user__link link">Еще {{author.recipe_cnt|add:"-3"}} рецептов...</a>
+                        <a href="{% url 'profile' author.username %}" class="card-user__link link">Еще {{ author.recipe_ingredients|add:"-3" }} рецептов...</a>
                     </li>
                 {% endif %}
             </ul>
