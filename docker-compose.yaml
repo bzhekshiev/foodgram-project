@@ -37,4 +37,7 @@ services:
 volumes:
   postgres_data:
   static_volume:
+<<<<<<< HEAD
   media_volume:
+=======
+>>>>>>> f13e38903dcabefcdd434b67e86b146cfb013985
