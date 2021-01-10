@@ -128,5 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .vscode/
-media/
+
 send_mails/
+recipes/static/
+yc

@@ -1,5 +1,6 @@
-from api.models import Favorite, Purchase, Subscribe
 from django import template
+
+from api.models import Favorite, Purchase, Subscribe
 
 try:
     from django.urls import NoReverseMatch, reverse

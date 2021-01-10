@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+
 from recipes.models import Recipe
 
 User = get_user_model()
@@ -9,15 +9,18 @@ User = get_user_model()
 class Favorite(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name='автор',
-        related_name='author_favorite')
+        related_name='favorites')
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, verbose_name='рецепт',
-        related_name='recipe_favorite')
+        related_name='favorites')
 
     class Meta:
-        unique_together = ('author', 'recipe')
-        verbose_name = _('избранное')
-        verbose_name_plural = _('избранные')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['author', 'recipe'],
+                name='unique_favorites')]
+        verbose_name = 'избранное'
+        verbose_name_plural = 'избранные'
 
 
 class Subscribe(models.Model):
@@ -28,7 +31,10 @@ class Subscribe(models.Model):
         verbose_name='подписчик')
 
     class Meta:
-        unique_together = ('author', 'follower')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['author', 'follower'],
+                name='unique_subscribes')]
         verbose_name = 'подписка'
         verbose_name_plural = 'подписки'
 
@@ -36,12 +42,15 @@ class Subscribe(models.Model):
 class Purchase(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name='автор',
-        related_name='author_purchase')
+        related_name='purchases')
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, verbose_name='рецепт',
-        related_name='recipe_purchase')
+        related_name='purchases')
 
     class Meta:
-        unique_together = ('author', 'recipe')
-        verbose_name = _('список покупок')
-        verbose_name_plural = _('списки покупок')
+        constraints = [
+            models.UniqueConstraint(
+                fields=['author', 'recipe'],
+                name='unique_purchases')]
+        verbose_name = 'список покупок'
+        verbose_name_plural = 'списки покупок'

@@ -1,5 +1,5 @@
 {% load user_filters %}
-{% if request.iser.is_authenticated %}
+{% if request.user.is_authenticated %}
   {% if ctx.author != request.user %} 
       {% if ctx.author|is_subscribe:request.user %}
           <button
