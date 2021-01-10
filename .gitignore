@@ -130,5 +130,4 @@ dmypy.json
 .vscode/
 
 send_mails/
-recipes/static/
 yc

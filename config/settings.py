@@ -17,10 +17,11 @@ SECRET_KEY = 'ixn4bt@47kav1la4o8-7uriyzcr^*_q$8(g2v0w=!*+vq$@7as'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "[::1]",
-    "testserver",
+    'localhost',
+    '127.0.0.1',
+    '[::1]',
+    'testserver',
+    '130.193.43.244'
 ]
 
 INSTALLED_APPS = [
@@ -51,7 +52,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 TEMPLATES = [
     {
