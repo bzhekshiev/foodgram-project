@@ -6,9 +6,9 @@
 Сайт опубликован по адресу [http://130.193.43.244/]
 
 # Стек технологий
-*Django, Django REST Framework
-*База данныx - PostgreSQL
-*Deploy - Docker, docker-compose, Gunicorn, Nginx
+* Django, Django REST Framework
+* База данныx - PostgreSQL
+* Deploy - Docker, docker-compose, Gunicorn, Nginx
 
 # Установка
 склонируйте проект с реппозитория GitHub и запустите docker-compose
