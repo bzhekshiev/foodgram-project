@@ -13,9 +13,9 @@
 # Установка
 склонируйте проект с реппозитория GitHub и запустите docker-compose
 ```
-git clone https://github.com/DmitriyShinkarev/foodgram-project.git
+git clone https://github.com/bzhekshiev/foodgram-project.git
 cd foodgram-project/
-docker-compose -f docker-compose.yaml up -d
+docker-compose up
 ```
 Миграции и сборка статики выполняется автоматически.
 
