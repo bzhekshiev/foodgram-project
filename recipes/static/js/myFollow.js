@@ -21,3 +21,8 @@ const myFollow = new MyFollow(container, '.card-user', header, api, true,{
 })
 myFollow.addEvent();
 
+function refreshPage() {    
+    setTimeout(function () {
+        location.reload()
+    }, 100);
+}

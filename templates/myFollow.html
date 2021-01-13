@@ -49,7 +49,8 @@
         </div>
         
         <div class="card-user__footer">
-            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+
+            <button class="button button_style_light-blue button_size_auto" name="subscribe" onClick="refreshPage()">Отписаться</button>
         </div>
         </div>
         {% endfor %}
@@ -66,4 +67,5 @@
 <script src="{% static 'js/components/Header.js' %}"></script>
 <script src="{% static 'js/api/Api.js' %}"></script>
 <script src="{% static 'js/myFollow.js' %}"></script>
+
 {% endblock %}
